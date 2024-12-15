@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"time"
-	// "sync"
+	"sync"
 )
 
 func work() {
@@ -12,5 +12,13 @@ func work() {
 }
 
 func main() {
-	// необходимо в отдельных горутинах вызвать функцию work() 10 раз и дождаться результатов выполнения вызванных функций
+	wg := new(sync.WaitGroup)
+	for i := 0; i < 10; i++{
+		wg.Add(1)
+		go func(){
+			defer wg.Done()
+			work()
+		}()
+	}
+	wg.Wait()
 }
